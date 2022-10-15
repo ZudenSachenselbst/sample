@@ -3,10 +3,13 @@
 import sys
 website_id       = 'your_id'
 website_password = 'your_password'
-website_url='website_url'
+website_url='https://sample.com'
 mail_server_account  = 'mail_server_account'
 mail_server_password = 'mail_server_password'
-    
+mail_from = mail_server_account
+mail_to   = mail_server_account
+smtp_server = 'smtp.*.jp'    
+
 import time
 import re
 
@@ -190,12 +193,13 @@ def send_vacant_room_mail():
     msg = MIMEMultipart()
 
     msg["Subject"] = "スタジオ楽予約状況"
-    msg["To"] = "momo_03@arrow.ocn.ne.jp"
-    msg["From"] = "momo_03@arrow.ocn.ne.jp"
+    msg["To"] = mail_to
+    msg["From"] = mail_from
 
 
 
     # ファイルを添付
+
 
     from email.mime.image import MIMEImage
 
@@ -299,11 +303,11 @@ def send_vacant_room_mail():
 
     import ssl
     # サーバを指定する
-    #server = smtplib.SMTP("smtp.ocn.ne.jp", 465)
-    server = smtplib.SMTP_SSL("smtp.ocn.ne.jp", 465, context=ssl.create_default_context())
+    #server = smtplib.SMTP(smtp_server, 465)
+    server = smtplib.SMTP_SSL(smtp_server, 465, context=ssl.create_default_context())
     #server.set_debuglevel(True)
     # 認証を行う
-    server.login(account, password)
+    server.login(mail_server_account, mail_server_password)
 
     # メールを送信する
     server.send_message(msg)
@@ -322,11 +326,11 @@ def get_kakunin():
         os.remove('./screenshot_kakunin.png')
 
 
-    driver.get("https://web.star7.jp/mypage/mobile_info.php?p=c6370ba213")
+    driver.get(website_url)
     driver.find_element_by_name("login_id").clear()
-    driver.find_element_by_name("login_id").send_keys("yhi5ygbtkt@icloud.com")
+    driver.find_element_by_name("login_id").send_keys(website_id)
     driver.find_element_by_name("password").clear()
-    driver.find_element_by_name("password").send_keys("onomomokappa03")
+    driver.find_element_by_name("password").send_keys(website_password)
     driver.find_element_by_name("login_ok").click()
     driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='STUDIO'])[1]/following::input[5]").click()
 
@@ -357,7 +361,7 @@ def send_kakunin_mail():
 
     # MIMETextを作成
     #text = "メール本文"
-    text = "スタジオ楽の小野桃子の予約状況は添付画像見てね"
+    text = "スタジオ**の予約状況は添付画像見てね"
     part = MIMEText(text, "plain")
     send_msg.attach(part)
 
@@ -371,17 +375,17 @@ def send_kakunin_mail():
 
     #sys.exit()
 
-    send_msg["Subject"] = "スタジオ楽小野桃子予約状況"
-    send_msg["To"] = "momo_03@arrow.ocn.ne.jp"
-    send_msg["From"] = "momo_03@arrow.ocn.ne.jp"
+    send_msg["Subject"] = "スタジオ**予約状況"
+    send_msg["To"] = mail_to
+    send_msg["From"] = mail_from
 
     import ssl
     # サーバを指定する
-    #server = smtplib.SMTP("smtp.ocn.ne.jp", 465)
-    server = smtplib.SMTP_SSL("smtp.ocn.ne.jp", 465, context=ssl.create_default_context())
+    #server = smtplib.SMTP(smtp_server, 465)
+    server = smtplib.SMTP_SSL(smtp_server, 465, context=ssl.create_default_context())
     #server.set_debuglevel(True)
     # 認証を行う
-    server.login(account, password)
+    server.login(mail_server_account, mail_server_password)
 
     # メールを送信する
     server.send_message(send_msg)
@@ -400,11 +404,11 @@ def get_cancel():
         os.remove('./screenshot_cancel.png')
 
 
-    driver.get("https://web.star7.jp/mypage/mobile_info.php?p=c6370ba213")
+    driver.get(website_url)
     driver.find_element_by_name("login_id").clear()
-    driver.find_element_by_name("login_id").send_keys("yhi5ygbtkt@icloud.com")
+    driver.find_element_by_name("login_id").send_keys(website_id)
     driver.find_element_by_name("password").clear()
-    driver.find_element_by_name("password").send_keys("onomomokappa03")
+    driver.find_element_by_name("password").send_keys(website_password)
     driver.find_element_by_name("login_ok").click()
 
     driver.find_element_by_xpath("(.//*[normalize-space(text()) and normalize-space(.)='STUDIO'])[1]/following::input[5]").click()
@@ -434,11 +438,11 @@ def get_yoyaku(room, hour):
     d1 = today.strftime("%Y/%m/%d") 
     print(d1, flush=True)
 
-    driver.get("https://web.star7.jp/mypage/mobile_info.php?p=c6370ba213")
+    driver.get(website_url)
     driver.find_element_by_name("login_id").clear()
-    driver.find_element_by_name("login_id").send_keys("yhi5ygbtkt@icloud.com")
+    driver.find_element_by_name("login_id").send_keys(website_id)
     driver.find_element_by_name("password").clear()
-    driver.find_element_by_name("password").send_keys("onomomokappa03")
+    driver.find_element_by_name("password").send_keys(website_password)
     driver.find_element_by_name("login_ok").click()
     driver.find_element_by_name("yoyaku").click()
 
@@ -502,17 +506,17 @@ def send_cancel_mail():
 
     #sys.exit()
 
-    send_msg["Subject"] = "スタジオ楽小野桃子予約キャンセル"
-    send_msg["To"] = "momo_03@arrow.ocn.ne.jp"
-    send_msg["From"] = "momo_03@arrow.ocn.ne.jp"
+    send_msg["Subject"] = "スタジオ**予約キャンセル"
+    send_msg["To"] = mail_to
+    send_msg["From"] = mail_from
 
     import ssl
     # サーバを指定する
-    #server = smtplib.SMTP("smtp.ocn.ne.jp", 465)
-    server = smtplib.SMTP_SSL("smtp.ocn.ne.jp", 465, context=ssl.create_default_context())
+    #server = smtplib.SMTP(smtp_server, 465)
+    server = smtplib.SMTP_SSL(smtp_server, 465, context=ssl.create_default_context())
     #server.set_debuglevel(True)
     # 認証を行う
-    server.login(account, password)
+    server.login(mail_server_account, mail_server_password)
 
     # メールを送信する
     server.send_message(send_msg)
@@ -536,16 +540,16 @@ def send_error_mail():
     #sys.exit()
 
     send_msg["Subject"] = "スタジオ楽予約エラー"
-    send_msg["To"] = "momo_03@arrow.ocn.ne.jp"
-    send_msg["From"] = "momo_03@arrow.ocn.ne.jp"
+    send_msg["To"] = mail_to
+    send_msg["From"] = mail_from
 
     import ssl
     # サーバを指定する
-    #server = smtplib.SMTP("smtp.ocn.ne.jp", 465)
-    server = smtplib.SMTP_SSL("smtp.ocn.ne.jp", 465, context=ssl.create_default_context())
+    #server = smtplib.SMTP(smtp_server, 465)
+    server = smtplib.SMTP_SSL(smtp_server, 465, context=ssl.create_default_context())
     #server.set_debuglevel(True)
     # 認証を行う
-    server.login(account, password)
+    server.login(mail_server_account, mail_server_password)
 
     # メールを送信する
     server.send_message(send_msg)
@@ -611,7 +615,6 @@ while True:
     print('Subject ' + email_subject, flush=True)
     print('Date ' + email_date, flush=True)
 
-    #if "momo_03" in email_from and email_date != last_kakunin_date :
     if email_date != last_kakunin_date :
         if    "check" in email_subject: 
             print("call send_vacant_room_mail()", flush=True) 
