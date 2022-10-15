@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 
 import sys
-studio_id       = 'yhi5ygbtkt@icloud.com'
-studio_password = 'onomomokappa03'
-url='https://web.star7.jp/mypage/mobile_info.php?p=c6370ba213'
-
+website_id       = 'your_id'
+website_password = 'your_password'
+website_url='website_url'
+mail_server_account  = 'mail_server_account'
+mail_server_password = 'mail_server_password'
+    
 import time
 import re
 
@@ -97,11 +99,11 @@ def get_vacant_room():
         os.remove('./screenshot_g.png')
 
 
-    driver.get("https://web.star7.jp/mypage/mobile_info.php?p=c6370ba213")
+    driver.get(website_url)
     driver.find_element_by_name("login_id").clear()
-    driver.find_element_by_name("login_id").send_keys("yhi5ygbtkt@icloud.com")
+    driver.find_element_by_name("login_id").send_keys(website_id)
     driver.find_element_by_name("password").clear()
-    driver.find_element_by_name("password").send_keys("onomomokappa03")
+    driver.find_element_by_name("password").send_keys(website_password)
     driver.find_element_by_name("login_ok").click()
     driver.find_element_by_name("yoyaku").click()
 
@@ -571,10 +573,8 @@ while True:
     print('connected.')
 
     # 認証
-    account  = 'momo_03@arrow.ocn.ne.jp'
-    password = 'SHgQWf72'
-    cli.user(account) 
-    cli.pass_(password) 
+    cli.user(mail_server_account) 
+    cli.pass_(mail_server_password) 
     print('logged in.')
 
     # メールボックス内のメールの総数を取得
