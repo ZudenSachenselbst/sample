@@ -431,14 +431,15 @@ var options = {
             console.log("query=", query);
             axios.get(query)
               .then(response => {
-                 var items =  response.data; 
+                 //var items =  response.data; 
+                 var items =  response.data.results.bindings; 
                  console.log(JSON.stringify(response.data));
                  var new_nodes = [];
                  var new_edges = []; 
 
 
                  var rev_subject_link =  items.filter( function(item){ 
-                    if( item.rev.includes("subject") ){ return true;} else{ return false; }} );
+                    if( "rev" in item && item.rev.includes("subject") ){ return true;} else{ return false; }} );
                  if(  rev_subject_link.length > 0 ){
                     // rev:subject のノードがある
                     // subject ノードをレイアウトするエリアの作成
@@ -470,28 +471,24 @@ var options = {
 
                  for( item of items){
                     console.log("checking item:", item); 
-
-                    item.p = "";
-                    if( item.rel == ""){ 
-                        item.p = item.rev;
-                    } else {
-                        item.p = item.rel;
-                    } 
+                    if( typeof item.p == "string"){ 
+                      item.p.value = item.p ; 
+                    }
 
                     // lengthy prefix を削除 
-                    item.p = item.p.replace("dbpedia-owl:", "");
-                    item.p = item.p.replace("dcterms:", "");
+                    item.p.value = item.p.value.replace("dbpedia-owl:", "");
+                    item.p.value = item.p.value.replace("dcterms:", "");
 
                     var link_name = item.p
-                    var tmp = item.p.match( "/([^/]+)$");    
+                    var tmp = item.p.value.match( "/([^/]+)$");    
                     if( tmp ) {
                         link_name = tmp[1];
                     }
 
  
                     // 多言語表記は除外(  href://**.dbpedia.org/resource/***"  で ** が "ja" でない。
-                    if(       item.o.includes(    "dbpedia.org")  ){ 
-                        if(   item.o.includes( "ja.dbpedia.org") ){
+                    if(       item.o.value.includes(    "dbpedia.org")  ){ 
+                        if(   item.o.value.includes( "ja.dbpedia.org") ){
                         } else {
                             console.log("skip non-japanese", item);
                             continue;
@@ -500,25 +497,25 @@ var options = {
                              
 
                     // 数字ノードを除外
-                    if(  item.o.match(/^[\d\.]+$/)  ){ 
+                    if(  item.o.value.match(/^[\d\.]+$/)  ){ 
                         console.log("skip number", item);
                         continue;
                     } 
 
                     // oldid を除外
-                    if(  item.o.includes("oldid=") ) { 
+                    if(  item.o.value.includes("oldid=") ) { 
                         console.log("skip oldid", item);
                         continue;
                     } 
 
                     // 画像 を除外
-                    if(  item.o.match(/\.(svg|jpg|png)$/i ) ){ 
+                    if(  item.o.value.match(/\.(svg|jpg|png)$/i ) ){ 
                         console.log("skip", item);
                         continue;
                     } 
 
                     // primaryTopic, isPrimaryTopicOf link を除外
-                    if(  item.p.match(/PrimaryTopic/i ) ) { 
+                    if(  item.p.value.match(/PrimaryTopic/i ) ) { 
                         console.log("skip *PrimaryTopic*", item);
                         continue;
                     } 
@@ -526,9 +523,9 @@ var options = {
 
 
                     // wikiPage** link でつながるノードをとりあえず除外
-                     if(  item.p.includes( "wikiPage" )) { 
+                     if(  item.p.value.includes( "wikiPage" )) { 
                         // wikiPageRedirects は表示する。
-                        if(  item.p.includes( "wikiPageRedirects" )) { 
+                        if(  item.p.value.includes( "wikiPageRedirects" )) { 
                         } else { 
                             console.log("skip wikiPageWikiLink", item);
                             continue;
@@ -537,9 +534,9 @@ var options = {
 
                     // image* や verify* link でつながるノードを除外
 
-                     if( item.p.includes( "image" ) ||
-                         item.p.includes( "verif" ) ||
-                         item.p.includes( "thumbnail" ) ){ 
+                     if( item.p.value.includes( "image" ) ||
+                         item.p.value.includes( "verif" ) ||
+                         item.p.value.includes( "thumbnail" ) ){ 
                         console.log("skip image", item);
                         continue;
                     } 
@@ -589,17 +586,17 @@ var options = {
 
                     var node_name = item.o; 
                     // value: "http://cy.dbpedia.org/resource/Pectin" なら Pectin だけ取る
-                    var tmp = item.o.match( "/([^/]+)$"); 
+                    var tmp = item.o.value.match( "/([^/]+)$"); 
                     if( tmp ) {
                         node_name = tmp[1];
                     }
 
                
                     var node_class = "node_class_string";
-                    if( item.o.includes("http" ) ){ 
-                        if( item.o.includes("dbpedia" ) ){
+                    if( item.o.value.includes("http" ) ){ 
+                        if( item.o.value.includes("dbpedia" ) ){
                             node_class = "node_class_dbpedia";
-                        } else if( item.o.includes("wikipedia" ) ){ 
+                        } else if( item.o.value.includes("wikipedia" ) ){ 
                             node_class = "node_class_wikipedia";
                         } else {
                             console.log("unknown http");
@@ -726,7 +723,7 @@ var options = {
             console.log("query=", query);
             axios.get(query)
               .then(response => {
-                 var items =  response.data;
+                 var items =  response.data.results.bindings;
                  console.log(JSON.stringify(response.data));
                  var new_nodes = [];
                  var new_edges = []; 
@@ -769,51 +766,51 @@ var options = {
                         item.p = item.rel;
                     } 
                     // lengthy prefix を削除 
-                    item.p = item.p.replace("dbpedia-owl:", "");
-                    item.p = item.p.replace("dcterms:", "");
+                    item.p = item.p.value.replace("dbpedia-owl:", "");
+                    item.p = item.p.value.replace("dcterms:", "");
             
                     var link_name = item.p;
-                    var tmp = item.p.match( "/([^/]+)$");    
+                    var tmp = item.p.value.match( "/([^/]+)$");    
                     if( tmp ) {
                         link_name = tmp[1];
                     }
 
 
                     // 多言語表記は除外
-                    if(( item.p.includes( "#sameAs") || item.p.includes( "#label") ) || 
-                         item.o.includes( "dbpedia.org") && 
-                        ! (  item.o.includes( "ja.dbpedia.org") || 
-                             item.o.includes( "/dbpedia.org" ))) {   // dbpedia.org の sameAs は残す。
+                    if(( item.p.value.includes( "#sameAs") || item.p.value.includes( "#label") ) || 
+                         item.o.value.includes( "dbpedia.org") && 
+                        ! (  item.o.value.includes( "ja.dbpedia.org") || 
+                             item.o.value.includes( "/dbpedia.org" ))) {   // dbpedia.org の sameAs は残す。
                         console.log("skip non-japanese ", item);
                         continue;
                     } 
 
-                    if(  item.o.includes("Template") || 
-                         item.o.includes("ファイル:")   )  { 
+                    if(  item.o.value.includes("Template") || 
+                         item.o.value.includes("ファイル:")   )  { 
                         continue;
                     } 
 
                     // 数字ノードを除外
-                    if(  item.o.match(/^[\d\.]+$/)  ){ 
+                    if(  item.o.value.match(/^[\d\.]+$/)  ){ 
                         console.log("skip number ", item);
                         continue;
                     } 
 
                     // oldid を除外
-                    if(  item.o.includes("oldid=") ) { 
+                    if(  item.o.value.includes("oldid=") ) { 
                         console.log("skip oldid", item);
                         continue;
                     } 
 
                     // 画像 を除外
-                    if(  item.o.match(/\.(svg|jpg|png)$/i ) ){ 
+                    if(  item.o.value.match(/\.(svg|jpg|png)$/i ) ){ 
                         console.log("skip image", item);
                         continue;
                     } 
 
                     // wikiPage** link 以外でつながるノードを除外
-                     if(  item.p.includes( "wikiPage" )) { 
-                        if(  item.p.includes( "wikiPageRedirects" )) { 
+                     if(  item.p.value.includes( "wikiPage" )) { 
+                        if(  item.p.value.includes( "wikiPageRedirects" )) { 
                             console.log("skip wikiPageRedirects", item);
                             continue;
                         }
@@ -851,7 +848,7 @@ var options = {
 
                     var node_name = item.o; 
                     // value: "http://cy.dbpedia.org/resource/Pectin" なら Pectin だけ取る
-                    var tmp = item.o.match( "/([^/]+)$"); 
+                    var tmp = item.o.value.match( "/([^/]+)$"); 
                     if( tmp ) {
                         node_name = tmp[1];
                     }
@@ -867,10 +864,10 @@ var options = {
 
 
                     var node_class = "node_class_string";
-                    if( item.o.includes("http" ) ){ 
-                        if( item.o.includes("dbpedia" ) ){
+                    if( item.o.value.includes("http" ) ){ 
+                        if( item.o.value.includes("dbpedia" ) ){
                             node_class = "node_class_dbpedia";
-                        } else if( item.o.includes("wikipedia" ) ){ 
+                        } else if( item.o.value.includes("wikipedia" ) ){ 
                             node_class = "node_class_wikipedia";
                         } else {
                             console.log("unknown http");
@@ -1029,7 +1026,7 @@ var options = {
 
            
                 var link_name = item.p;
-                var tmp = item.p.match( "/([^/]+)$");    
+                var tmp = item.p.value.match( "/([^/]+)$");    
                 if( tmp ) {
                     link_name = tmp[1];
                 }
@@ -1323,7 +1320,7 @@ var options = {
         axios.get(query)
               .then(response => {
                  console.log(JSON.stringify(response.data));
-                 var items =  response.data; 
+                 var items =  response.data.results.bindings; 
                  console.log( "hit:", items.length);
                  if( items.length > 0 ){
                       // 新規ノードの追加
