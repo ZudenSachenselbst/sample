@@ -5,7 +5,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>丸紅・ユニテックフーズ殿向け demo</title>
+  <title>wikidata viewer</title>
 
   <link rel="stylesheet" type="text/css"
     href="https://cdnjs.cloudflare.com/ajax/libs/cytoscape-panzoom/2.5.3/cytoscape.js-panzoom.css">
@@ -422,7 +422,12 @@ var options = {
             var data = target.data();
             // ***/resource/*** → ***/page/***
             var name = data.name;
-            var query = "http://www7353uo.sakura.ne.jp:8084/dbpedia?word=" + name; 
+            //var query = "http://www7353uo.sakura.ne.jp:8084/dbpedia?word=" + name; 
+
+            var url = "http://ja.dbpedia.org/resource/" + data.name;
+            var query =  "http://ja.dbpedia.org/sparql?format=json&query=" + 
+              "select distinct * where { <" + url + "> ?p ?o .  } LIMIT 300 ";
+
             console.log("query=", query);
             axios.get(query)
               .then(response => {
@@ -712,7 +717,12 @@ var options = {
 
             var data = target.data();
             var name = data.name;
-            var query = "http://www7353uo.sakura.ne.jp:8084/dbpedia?word=" + name; 
+            //var query = "http://www7353uo.sakura.ne.jp:8084/dbpedia?word=" + name; 
+
+            var url = "http://ja.dbpedia.org/resource/" + name;
+            var query =  "http://ja.dbpedia.org/sparql?format=json&query=" + 
+              "select distinct * where { <" + url + "> ?p ?o .  } LIMIT 300 ";
+            
             console.log("query=", query);
             axios.get(query)
               .then(response => {
@@ -1303,9 +1313,9 @@ var options = {
         // wikipedia で検索
 
         var url = "http://ja.dbpedia.org/resource/" + new_name; 
-        // var query =  "http://ja.dbpedia.org/sparql?format=json&query=" + 
-        //      "select distinct * where { <" + url + "> ?p ?o .  } LIMIT 300 ";
-        var query = "http://www7353uo.sakura.ne.jp:8084/dbpedia?word=" + new_name; 
+        var query =  "http://ja.dbpedia.org/sparql?format=json&query=" + 
+              "select distinct * where { <" + url + "> ?p ?o .  } LIMIT 300 ";
+        //var query = "http://www7353uo.sakura.ne.jp:8084/dbpedia?word=" + new_name; 
 
 
         console.log(query);
@@ -1362,7 +1372,7 @@ var options = {
 </head>
 
 <body>
-  <h1>丸紅・ユニテックフーズ殿向け demo</h1>
+  <h1>wikidata viewer</h1>
   <table border="1">
     <tr>
           <!--
