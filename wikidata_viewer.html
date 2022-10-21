@@ -254,6 +254,10 @@ var options = {
 
             var url = target.data().url;
             console.log( "url=", url ) ; 
+            if( typeof url == "string"){
+            } else {
+              url = url.value;
+            }
             window.open(url, '_blank');
 
         },
@@ -320,7 +324,10 @@ var options = {
 
                 var url = target.data().url;
                 console.log( "url=", url ) ; 
-
+                if ( typeof url == "string" ){
+                } else {
+                  url = url.value;
+                }
                 // value: "http://cy.dbpedia.org/resource/Pectin" なら Pectin だけ取る
                 var word = "";
                 var tmp = url.match( "/([^/]+)$"); 
@@ -759,17 +766,15 @@ var options = {
                  for( item of items){
                     // console.log("checking ", item); 
 
-                    item.p = "";
-                    if( item.rel == ""){ 
-                        item.p = item.rev;
-                    } else {
-                        item.p = item.rel;
-                    } 
+                    if( typeof item.p == "string"){ 
+                      item.p.value = item.p ; 
+                    }
+                    
                     // lengthy prefix を削除 
-                    item.p = item.p.value.replace("dbpedia-owl:", "");
-                    item.p = item.p.value.replace("dcterms:", "");
+                    item.p.value = item.p.value.replace("dbpedia-owl:", "");
+                    item.p.value = item.p.value.replace("dcterms:", "");
             
-                    var link_name = item.p;
+                    var link_name = item.p.value;
                     var tmp = item.p.value.match( "/([^/]+)$");    
                     if( tmp ) {
                         link_name = tmp[1];
