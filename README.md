@@ -18,6 +18,39 @@ java - Use a Binary Search on an int array sorted in descending order - Stack Ov
 
 
 ```
+#include <stdio.h>
+
+void main(void){
+	
+	int d[8] = {9,7,6,4,3,2,1};
+	
+	int min, mid, max, srch, hit;
+	
+	min = 0;	// initial search left boundary
+	max = 7;	// initial search right boundary 
+	srch = 6;	// item to find
+	hit = -1; 	// candidate index
+	
+	for(; hit != srch && min < max ; ){
+		mid = (min + max) /2;
+		hit = d[mid];
+		if(         hit == srch ){{
+			
+		}
+		} else if ( hit  < srch) {
+			max --;
+		} else {  // hit > srch
+			min --;
+		}
+	}	
+	
+	if( hit == srch ){
+		printf("found %d  at d[%d]\n", srch, mid );
+	} else {
+		printf("%d not found in d", srch);
+	}
+		
+}
 
 
 
