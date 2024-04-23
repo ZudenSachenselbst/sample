@@ -9,6 +9,20 @@
 <img src="https://www.howisit.jp/myblog/wp-content/uploads/2021/11/1fa5c248b7fa2510e6c97a1ed4210eac.jpg" width=400>
 
 
+# 降順の場合
+
+Binary search https://www.programming-algorithms.net/article/40119/Binary-search
+
+
+java - Use a Binary Search on an int array sorted in descending order - Stack Overflow https://stackoverflow.com/questions/28283693/use-a-binary-search-on-an-int-array-sorted-in-descending-order
+
+
+```
+
+
+
+```
+
 # online C compiler
 Online C compiler and IDE - API provided by Sphere Engine - Ideone.com https://ideone.com/l/c
 
