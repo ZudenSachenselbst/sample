@@ -1,5 +1,5 @@
 
-# 二分探索：Dev Basics／Keyword - ＠IT https://atmarkit.itmedia.cojp/ait/articles/1704/18/news021.html
+# 二分探索：Dev Basics／Keyword - ＠IT https://atmarkit.itmedia.co.jp/ait/articles/1704/18/news021.html
 
 <img src="https://image.itmedia.co.jp/ait/articles/1704/18/dt-02.gif" width=400>
 
@@ -20,39 +20,46 @@ java - Use a Binary Search on an int array sorted in descending order - Stack Ov
 ```
 #include <stdio.h>
 
-void main(void){
+int main(void){
 	
-	int d[8] = {9,7,6,4,3,2,1};
-	
+	//int d[8] = {9,7,6,4,3,2,1};
+	int d[] = {31,29,27,25,23,21,19,17,15,13,11,9,7,5,3,1};
+		// この書き方をすると、初期化に与えた個数分の配列が作成される。	
+
 	int min, mid, max, srch, hit;
 	
-	min = 0;	// initial search left boundary
-	max = 7;	// initial search right boundary 
-	srch = 6;	// item to find
-	hit = -1; 	// candidate index
+	min = 0;			// initial search left boundary
+	// max = 7
+	max = (sizeof(d)/ sizeof(int));	// initial search right boundary 
+					// d の配列数がこの式で求まる
+			
+	srch = 31;	// value to find
+	hit = -1; 	// value candidate index
 	
-	for(; hit != srch && min < max ; ){
+	// for(; hit != srch && min < max ; )
+	for(; hit != srch && min <= max ; ){
 		mid = (min + max) /2;
 		hit = d[mid];
-		if(         hit == srch ){{
+		printf("min=%d, mid=%d, max = %d, d[%d}=%d\n", min, mid, max, mid, hit);
+		if(         hit == srch ){
 			
-		}
 		} else if ( hit  < srch) {
-			max --;
+			// mid より前に srch がある
+			max = mid - 1;
 		} else {  // hit > srch
-			min --;
+			// mid より先に srch がある
+			min = mid + 1;
 		}
-	}	
+	}
 	
 	if( hit == srch ){
 		printf("found %d  at d[%d]\n", srch, mid );
 	} else {
 		printf("%d not found in d", srch);
 	}
-		
+	
+	return 0;
 }
-
-
 
 ```
 
